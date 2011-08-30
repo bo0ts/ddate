@@ -10,6 +10,8 @@ ddate:
 	gzip -c ddate.1 >> ddate.1.gz
 
 install:
+	mkdir -p $(PREFIX)/bin/
+	mkdir -p $(PREFIX)/share/man/man1/
 	cp ddate $(PREFIX)/bin/
 	cp ddate.1.gz $(PREFIX)/share/man/man1/
 
