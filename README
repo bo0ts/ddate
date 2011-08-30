@@ -1,3 +1,9 @@
+This is exactly the same ddate version that can be found in the
+util-linux 2.20 release. It is here, because util-linux doesn't build
+ddate by default anymore and at least the maintainer of the ArchLinux
+package seems happy to get rid of it. It is also available from the
+AUR.
+
 
 PERPETUAL DATE CONVERTER FROM GREGORIAN TO POEE CALENDAR
 
