@@ -3,13 +3,15 @@ CFLAGS = -g -O2 -Wall -Wextra
 CPP = gcc -std=gnu99 -E
 CPPFLAGS = -g
 
+PREFIX=/usr/local
+
 ddate:
 	$(CC) $(CCFLAGS) ddate.c -o ddate
 	gzip -c ddate.1 >> ddate.1.gz
 
 install:
-	cp ddate /usr/bin/
-	cp ddate.1.gz /usr/share/man/man1/
+	cp ddate $(PREFIX)/bin/
+	cp ddate.1.gz $(PREFIX)/share/man/man1/
 
 .PHONY: clean
 clean:
