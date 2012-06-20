@@ -14,5 +14,5 @@ add_custom_target( manpage ALL
   DEPENDS ddate.1.gz
   )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ddate.1.gz DESTINATION share/man1)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ddate.1.gz DESTINATION share/man/man1)
 install(TARGETS ddate DESTINATION bin)
