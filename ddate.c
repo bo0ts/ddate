@@ -18,6 +18,10 @@
    Sweetmorn, Bureaucracy 42, 3161 YOLD, by Lee H:. O:. Smith, KYTP, 
    aka Andrew Bulhak, aka acb@dev.null.org
 
+   Slightly hackled and crackled by a sweet firey stove on
+   Boomtime, the 53rd day of Bureaucracy in the YOLD 3179,
+   by Chaplain Nyan the Wiser, aka Dan Dart, aka ntw@dandart.co.uk
+
    and I'm not responsible if this program messes anything up (except your 
    mind, I'm responsible for that) (and that goes for me as well --lhos)
 
@@ -25,6 +29,7 @@
    Bureflux 3161:      First release of enhanced ddate with format strings
    59 Bcy, 3161:       PRAISE_BOB and KILL_BOB options split, other minor
                        changes.
+   53 Bcy, 3179:       Fixed gregorian date conversions less than YOLD 1167
 
    1999-02-22 Arkadiusz Miskiewicz <misiek@pld.ORG.PL>
    - added Native Language Support
@@ -133,6 +138,7 @@ char *excl[] = {
     "Grudnuk demand sustenance!", "Keep the Lasagna flying!",
     "You are what you see.",
     "Or is it?", "This statement is false.",
+    "Lies and slander, sire!", "Hee hee hee!",
 #if defined(linux) || defined (__linux__) || defined (__linux)
     "Hail Eris, Hack Linux!",
 #endif
@@ -319,7 +325,7 @@ struct disc_time makeday(int imonth,int iday,int iyear) /*i for input */
 
     memset(&funkychickens,0,sizeof(funkychickens));
     /* basic range checks */
-    if (imonth < 1 || imonth > 12) {
+    if (imonth < 1 || imonth > 12 || iyear == 0) {
 	    funkychickens.season = -1;
 	    return funkychickens;
     }
@@ -332,7 +338,9 @@ struct disc_time makeday(int imonth,int iday,int iyear) /*i for input */
     }
     
     imonth--;
-    funkychickens.year= iyear+1166;
+    /*  note: gregorian year 0 doesn't exist so
+     *  add one if user specifies a year less than 0 */
+    funkychickens.year= iyear+1166 + ((0 > iyear)?1:0);
     while(imonth>0) { dayspast+=cal[--imonth]; }
     funkychickens.day=dayspast+iday-1;
     funkychickens.season=0;
