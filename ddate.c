@@ -29,7 +29,7 @@
    1999-02-22 Arkadiusz Miskiewicz <misiek@pld.ORG.PL>
    - added Native Language Support
 
-   2000-03-17 Burt Holzman <bnh@iname.com>
+   2000-03-17 Burt Holzman <holzman+ddate@gmail.com>
    - added range checks for dates
 */
 
