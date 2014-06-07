@@ -31,6 +31,11 @@
 
    2000-03-17 Burt Holzman <holzman+ddate@gmail.com>
    - added range checks for dates
+
+   2014-06-07 William Woodruff <william@tuffbizz.com>
+   - removed gettext dependent locale code
+
+   FIVE TONS OF FLAX
 */
 
 /* configuration options  VVVVV   READ THIS!!! */
@@ -61,12 +66,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
-
-// work around includes and defines from formerly nls.h
-#include <locale.h>
-#include <libintl.h>
-
-#define LOCALEDIR "/usr/share/locale"
 
 
 // work around includes and defines from formerly c.h
@@ -184,10 +183,6 @@ main (int argc, char *argv[]) {
     progname = argv[0];
     if ((p = strrchr(progname, '/')) != NULL)
 	progname = p+1;
-
-    setlocale(LC_ALL, "");
-    bindtextdomain(PACKAGE, LOCALEDIR);
-    textdomain(PACKAGE);
 
     srandom(time(NULL));
     /* do args here */
