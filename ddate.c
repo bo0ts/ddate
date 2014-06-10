@@ -31,6 +31,9 @@
 
    2000-03-17 Burt Holzman <holzman+ddate@gmail.com>
    - added range checks for dates
+
+   15th of Confusion, 3180:
+   - call out adherents of the wrong fruit
 */
 
 /* configuration options  VVVVV   READ THIS!!! */
@@ -135,6 +138,8 @@ char *excl[] = {
     "Or is it?", "This statement is false.",
 #if defined(linux) || defined (__linux__) || defined (__linux)
     "Hail Eris, Hack Linux!",
+#elif defined(__APPLE__)
+    "This Fruit is not the True Fruit of Discord.",
 #endif
     ""
 };
