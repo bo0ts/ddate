@@ -183,7 +183,7 @@ struct disc_time makeday(int,int,int);
 
 int
 main (int argc, char *argv[]) {
-    long t;
+    time_t t;
     struct tm *eris;
     int bob,raw;
     struct disc_time hastur;
