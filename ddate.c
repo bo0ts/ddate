@@ -78,7 +78,7 @@
 
 // work around includes and defines from formerly c.h
 #ifndef ARRAY_SIZE
-# define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+# define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 #endif
 
 /* &a[0] degrades to a pointer: a different type from an array */
@@ -170,7 +170,7 @@ static inline int leapp(int i) {
 
 /* select a random string */
 static inline char *sel(char **strings, int num) {
-	return(strings[random()%num]);
+	return(strings[rand()%num]);
 }
 
 void print(struct disc_time,char **); /* old */
@@ -195,7 +195,7 @@ main (int argc, char *argv[]) {
     if ((p = strrchr(progname, '/')) != NULL)
 	progname = p+1;
 
-    srandom(time(NULL));
+    srand(time(NULL));
     /* do args here */
     for(pi=1; pi<argc; pi++) {
 	switch(argv[pi][0]) {
