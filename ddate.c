@@ -76,16 +76,9 @@
 #include <stdio.h>
 
 
-// work around includes and defines from formerly c.h
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr)[0])
 #endif
-
-/* &a[0] degrades to a pointer: a different type from an array */
-# define __must_be_array(a) \
-	BUILD_BUG_ON_ZERO(__builtin_types_compatible_p(__typeof__(a), __typeof__(&a[0])))
-
-#define BUILD_BUG_ON_ZERO(e) (sizeof(struct { int:-!!(e); }))
 
 /* work around hacks for standalone package */
 #define PACKAGE "ddate"
@@ -173,10 +166,7 @@ static inline char *sel(char **strings, int num) {
 	return(strings[rand()%num]);
 }
 
-void print(struct disc_time,char **); /* old */
 void format(char *buf, const char* fmt, struct disc_time dt);
-/* read a fortune file */
-int load_fortunes(char *fn, char *delim, char** result);
 
 struct disc_time convert(int,int);
 struct disc_time makeday(int,int,int);
