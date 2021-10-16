@@ -78,7 +78,7 @@
 
 // work around includes and defines from formerly c.h
 #ifndef ARRAY_SIZE
-# define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr)[0])
 #endif
 
 /* &a[0] degrades to a pointer: a different type from an array */
