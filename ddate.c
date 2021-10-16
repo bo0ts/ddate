@@ -84,10 +84,6 @@
 #define PACKAGE "ddate"
 #define PACKAGE_STRING "Stand Alone"
 
-#ifndef __GNUC__
-#define inline /* foo */
-#endif
-
 #ifdef KILL_BOB
 int xday_countdown(int yday, int year);
 #endif
@@ -153,16 +149,16 @@ default_fmt
 
 #define DY(y) (y+1166)
 
-static inline char *ending(int i) {
+static char *ending(int i) {
 	return i/10==1?"th":(i%10==1?"st":(i%10==2?"nd":(i%10==3?"rd":"th")));
 }
 
-static inline int leapp(int i) {
+static int leapp(int i) {
 	return (!(DY(i)%4))&&((DY(i)%100)||(!(DY(i)%400)));
 }
 
 /* select a random string */
-static inline char *sel(char **strings, int num) {
+static char *sel(char **strings, int num) {
 	return(strings[rand()%num]);
 }
 
