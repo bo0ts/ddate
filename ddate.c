@@ -43,6 +43,9 @@
    15th of Confusion, 3180:
    - call out adherents of the wrong fruit
 
+   40th of Confusion, 3184 Franz_Nord
+   - -a option added the curse of the greyface
+
    FIVE TONS OF FLAX
 */
 
@@ -166,6 +169,7 @@ void format(char *buf, const char* fmt, struct disc_time dt);
 
 struct disc_time convert(int,int);
 struct disc_time makeday(int,int,int);
+struct disc_time unmakeday(int,int,int);
 
 int
 main (int argc, char *argv[]) {
@@ -190,6 +194,7 @@ main (int argc, char *argv[]) {
 	    switch(argv[pi][1]) {
 	    case 'V':
 		printf(("%s (%s)\n"), progname, PACKAGE_STRING);
+	    case 'a': goto aneris;
 	    default: goto usage;
 	    }
 	default: goto thud;
@@ -226,6 +231,27 @@ main (int argc, char *argv[]) {
     format(schwa, fnord, hastur);
     printf("%s\n", schwa);
    
+    return 0;
+  aneris:
+    if (argc-pi==4){
+        int moe=atoi(argv[pi+1]), larry=atoi(argv[pi+2]), curly=atoi(argv[pi+3]);
+	hastur = unmakeday(
+ #ifdef US_FORMAT
+           moe,larry,
+ #else
+           larry,moe,
+ #endif
+           curly);
+	if (hastur.season == -1){
+		printf("Invalid date -- out of range\n");
+		return -1;
+	}
+#ifdef US_FORMAT
+	printf("%d %d %d\n", hastur.season, hastur.day, hastur.year);
+#else
+	printf("%d %d %d\n", hastur.day, hastur.season, hastur.year);
+#endif
+    }
     return 0;
 }
 
@@ -339,6 +365,42 @@ struct disc_time makeday(int imonth,int iday,int iyear) /*i for input */
 	funkychickens.season++;
 	funkychickens.day-=73;
     }
+    return funkychickens;
+}
+
+struct disc_time unmakeday(int imonth, int iday, int iyear)
+{
+    struct disc_time funkychickens;
+    int days;
+    int month;
+    int cal[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    int leap;
+
+    memset(&funkychickens,0,sizeof(funkychickens));
+
+    /* basic range checks */
+    if(iday < 1 || iday > 73 | imonth < 1 || imonth > 5)
+    {
+	funkychickens.season = -1;
+	return funkychickens;
+    }
+
+    month = 0;
+    days = iday + (imonth - 1) * 73;
+    funkychickens.year = iyear-1166;
+    leap = leapp(iyear);
+    days += leap;
+
+    while(days>cal[month] || (leap && month == 1 && days>cal[month]+1)) {
+	days -= (cal[month] + ((leap && month == 1) ? 1 : 0));
+	month++;
+    }
+
+    month++;
+    funkychickens.season = month;
+    funkychickens.day = days;
+
+    // TODO: restumrechnung
     return funkychickens;
 }
 
