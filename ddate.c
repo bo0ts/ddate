@@ -201,9 +201,9 @@ main (int argc, char *argv[]) {
 	int moe=atoi(argv[pi]), larry=atoi(argv[pi+1]), curly=atoi(argv[pi+2]);
 	hastur=makeday(
 #ifdef US_FORMAT
-	    moe,larry,
-#else
 	    larry,moe,
+#else
+	    moe,larry,
 #endif
 	    curly);
 	if (hastur.season == -1) {
