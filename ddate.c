@@ -271,6 +271,8 @@ void format(char *buf, const char* fmt, struct disc_time dt)
 		case 'a': wibble=day_short[dt.yday%5]; break;
 		case 'B': wibble=season_long[dt.season]; break;
 		case 'b': wibble=season_short[dt.season]; break;
+		case 'u': sprintf(snarf, "%u", dt.season+1); wibble=snarf; break;
+        case 'U': sprintf(snarf, "%u%s", dt.season+1, ending(dt.season+1)); wibble=snarf; break;
 		case 'd': sprintf(snarf, "%d", dt.day+1); wibble=snarf; break;
 		case 'e': sprintf(snarf, "%d%s", dt.day+1, ending(dt.day+1)); 
 		    wibble=snarf; break;
