@@ -43,6 +43,9 @@
    15th of Confusion, 3180:
    - call out adherents of the wrong fruit
 
+   3181-Afm-51 Jim Wisniewski <wisnij+ddate@gmail.com>
+   - added ISO_FORMAT option
+
    FIVE TONS OF FLAX
 */
 
@@ -53,6 +56,12 @@
  */
 
 #define OLD_IMMEDIATE_FMT
+
+/* If you wish to use the ISO 8601 format for aneristic dates (y-m-d), as
+ * opposed to the Commonwealth format, define ISO_FORMAT.
+ */
+
+/* #define ISO_FORMAT */
 
 /* If you wish to use the US format for aneristic dates (m-d-y), as opposed to
  * the Commonwealth format, define US_FORMAT.
@@ -200,12 +209,17 @@ main (int argc, char *argv[]) {
     if (argc-pi==3){ 
 	int moe=atoi(argv[pi]), larry=atoi(argv[pi+1]), curly=atoi(argv[pi+2]);
 	hastur=makeday(
-#ifdef US_FORMAT
-	    moe,larry,
+#ifdef ISO_FORMAT
+	    larry,curly,moe
 #else
+# ifdef US_FORMAT
+	    moe,larry,
+# else
 	    larry,moe,
+# endif
+	    curly
 #endif
-	    curly);
+	);
 	if (hastur.season == -1) {
 		printf("Invalid date -- out of range\n");
 		return -1;
@@ -213,7 +227,15 @@ main (int argc, char *argv[]) {
 	fnord=fnord?fnord:default_fmt;
     } else if (argc!=pi) { 
       usage:
-	fprintf(stderr,("usage: %s [+format] [day month year]\n"), argv[0]);
+	fprintf(stderr,("usage: %s [+format] ["
+#if defined(ISO_FORMAT)
+	                "year month day"
+#elif defined(US_FORMAT)
+	                "month day year"
+#else
+	                "day month year"
+#endif
+	                "]\n"), argv[0]);
 	exit(1);
     } else {
 	t= time(NULL);
