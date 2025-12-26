@@ -2,3 +2,7 @@ build
 ddate.exe
 ddate.obj
 .vscode/
+
+# Rust
+target/
+Cargo.lock
