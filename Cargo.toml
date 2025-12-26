@@ -1,0 +1,20 @@
+[package]
+name = "ddate"
+version = "0.1.0"
+edition = "2021"
+description = "Discordian date converter"
+license = "CC0-1.0"
+
+[features]
+default = ["old_immediate_fmt", "kill_bob"]
+old_immediate_fmt = []
+us_format = []
+kill_bob = []
+praise_bob = []
+
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Link-time optimization
+codegen-units = 1   # Better optimization
+panic = "abort"     # No unwinding
+strip = true        # Strip symbols
