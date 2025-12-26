@@ -162,7 +162,7 @@ static char *sel(char **strings, int num) {
 	return(strings[rand()%num]);
 }
 
-void format(char *buf, const char* fmt, struct disc_time dt);
+void format(char *buf, size_t bufsize, const char* fmt, struct disc_time dt);
 
 struct disc_time convert(int,int);
 struct disc_time makeday(int,int,int);
@@ -223,17 +223,18 @@ main (int argc, char *argv[]) {
 	hastur=convert(bob,raw);
 	fnord=fnord?fnord:default_immediate_fmt;
     }
-    format(schwa, fnord, hastur);
+    format(schwa, sizeof(schwa), fnord, hastur);
     printf("%s\n", schwa);
    
     return 0;
 }
 
-void format(char *buf, const char* fmt, struct disc_time dt)
+void format(char *buf, size_t bufsize, const char* fmt, struct disc_time dt)
 {
     int tib_start=-1, tib_end=0;
     int i, fmtlen=strlen(fmt);
     char *bufptr=buf;
+    char *bufend=buf + bufsize - 1; /* leave room for null terminator */
 
 /*    fprintf(stderr, "format(%p, \"%s\", dt)\n", buf, fmt);*/
 
@@ -257,11 +258,15 @@ void format(char *buf, const char* fmt, struct disc_time dt)
     /* now do the formatting */
     buf[0]=0;
 
-    for(i=0; i<fmtlen; i++) {
+    for(i=0; i<fmtlen && bufptr < bufend; i++) {
 	if((i==tib_start) && (dt.day==-1)) {
 	    /* handle St. Tib's Day */
-	    strcpy(bufptr, ("St. Tib's Day"));
-	    bufptr += strlen(bufptr);
+	    const char *tibs = "St. Tib's Day";
+	    size_t len = strlen(tibs);
+	    size_t avail = bufend - bufptr;
+	    if(len > avail) len = avail;
+	    memcpy(bufptr, tibs, len);
+	    bufptr += len;
 	    i=tib_end;
 	} else {
 	    if(fmt[i]=='%') {
@@ -271,8 +276,8 @@ void format(char *buf, const char* fmt, struct disc_time dt)
 		case 'a': wibble=day_short[dt.yday%5]; break;
 		case 'B': wibble=season_long[dt.season]; break;
 		case 'b': wibble=season_short[dt.season]; break;
-		case 'd': sprintf(snarf, "%d", dt.day+1); wibble=snarf; break;
-		case 'e': sprintf(snarf, "%d%s", dt.day+1, ending(dt.day+1)); 
+		case 'd': snprintf(snarf, sizeof(snarf), "%d", dt.day+1); wibble=snarf; break;
+		case 'e': snprintf(snarf, sizeof(snarf), "%d%s", dt.day+1, ending(dt.day+1));
 		    wibble=snarf; break;
 		case 'H': if(dt.day==4||dt.day==49)
 		    wibble=holyday[dt.season][dt.day==49]; break;
@@ -280,18 +285,22 @@ void format(char *buf, const char* fmt, struct disc_time dt)
 		case 'n': *(bufptr++)='\n'; break;
 		case 't': *(bufptr++)='\t'; break;
 
-		case 'Y': sprintf(snarf, "%d", dt.year); wibble=snarf; break;
+		case 'Y': snprintf(snarf, sizeof(snarf), "%d", dt.year); wibble=snarf; break;
 		case '.': wibble=sel(excl, ARRAY_SIZE(excl));
 		    break;
 #ifdef KILL_BOB
-		case 'X': sprintf(snarf, "%d", 
+		case 'X': snprintf(snarf, sizeof(snarf), "%d",
 				  xday_countdown(dt.yday, dt.year));
 				  wibble = snarf; break;
 #endif /* KILL_BOB */
 		}
 		if(wibble) {
 /*		    fprintf(stderr, "wibble = (%s)\n", wibble);*/
-		    strcpy(bufptr, wibble); bufptr+=strlen(wibble);
+		    size_t len = strlen(wibble);
+		    size_t avail = bufend - bufptr;
+		    if(len > avail) len = avail;
+		    memcpy(bufptr, wibble, len);
+		    bufptr += len;
 		}
 	    } else {
 		*(bufptr++) = fmt[i];
