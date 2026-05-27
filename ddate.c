@@ -147,7 +147,7 @@ default_fmt
 #endif
 ;
 
-#define DY(y) (y+1166)
+#define DY(y) (y-1166)
 
 static char *ending(int i) {
 	return i/10==1?"th":(i%10==1?"st":(i%10==2?"nd":(i%10==3?"rd":"th")));
@@ -315,22 +315,21 @@ struct disc_time makeday(int imonth,int iday,int iyear) /*i for input */
 	    funkychickens.season = -1;
 	    return funkychickens;
     }
+    /*  note: gregorian year 0 doesn't exist so
+     *  add one if user specifies a year less than 0 */
+    funkychickens.year= iyear+1166 + ((0 > iyear)?1:0);
     if (iday < 1 || iday > cal[imonth-1]) {
-	    if (!(imonth == 2 && iday == 29 && iyear%4 == 0 &&
-		  (iyear%100 != 0 || iyear%400 == 0))) {
+	    if (!(imonth == 2 && iday == 29 && leapp(funkychickens.year))) {
 		    funkychickens.season = -1;
 		    return funkychickens;
 	    }
     }
     
     imonth--;
-    /*  note: gregorian year 0 doesn't exist so
-     *  add one if user specifies a year less than 0 */
-    funkychickens.year= iyear+1166 + ((0 > iyear)?1:0);
     while(imonth>0) { dayspast+=cal[--imonth]; }
     funkychickens.day=dayspast+iday-1;
     funkychickens.season=0;
-    if((funkychickens.year%4)==2) {
+    if(leapp(funkychickens.year)) {
 	if (funkychickens.day==59 && iday==29)  funkychickens.day=-1;
     }
     funkychickens.yday=funkychickens.day;
@@ -348,7 +347,7 @@ struct disc_time convert(int nday, int nyear)
    funkychickens.year = nyear+3066;
    funkychickens.day=nday;
    funkychickens.season=0;
-   if ((funkychickens.year%4)==2)
+   if (leapp(funkychickens.year))
      {if (funkychickens.day==59)
 	funkychickens.day=-1;
      else if (funkychickens.day >59)
