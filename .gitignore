@@ -2,3 +2,4 @@ build
 ddate.exe
 ddate.obj
 .vscode/
+.claude/settings.local.json
